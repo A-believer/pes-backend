@@ -1,0 +1,26 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+
+    # Disable directory browsing
+    Options -Indexes
+
+    # Block access to sensitive system files and folders
+    RedirectMatch 404 /\.(git|env)
+    RedirectMatch 404 /(app|bootstrap|config|database|resources|routes|storage|tests|vendor)
+    RedirectMatch 404 /(composer\.json|composer\.lock|package\.json|phpunit\.xml|artisan|vite\.config\.js)
+
+    # Handle CORS OPTIONS Preflight requests directly at Apache layer
+    SetEnvIf Request_Method ^OPTIONS$ cors_preflight
+    Header always set Access-Control-Allow-Origin "*" env=cors_preflight
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE" env=cors_preflight
+    Header always set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization" env=cors_preflight
+    Header always set Access-Control-Max-Age "86400" env=cors_preflight
+    
+    # Immediately return 204 No Content for preflight OPTIONS requests
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ - [R=204,L]
+
+    # Rewrite all other requests to the public/ directory
+    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
