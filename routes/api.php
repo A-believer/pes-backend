@@ -19,9 +19,11 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
     }
 
     try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        $command = $request->query('fresh') === 'true' ? 'migrate:fresh' : 'migrate';
+        \Illuminate\Support\Facades\Artisan::call($command, ['--force' => true]);
         return response()->json([
             'message' => 'Migrations completed successfully!',
+            'command_run' => $command,
             'output' => \Illuminate\Support\Facades\Artisan::output()
         ]);
     } catch (\Exception $e) {
