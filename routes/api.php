@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\Admin\QuoteAdminController;
+use App\Http\Controllers\Admin\JobMonitorController;
 use App\Http\Middleware\CheckAdminToken;
 
 Route::post('/contact', [SubmissionController::class, 'storeContact']);
@@ -26,6 +27,13 @@ Route::middleware([CheckAdminToken::class])->prefix('admin')->group(function () 
     Route::post('/quotes/{id}/approve', [QuoteAdminController::class, 'approve']);
     Route::post('/quotes/{id}/reject', [QuoteAdminController::class, 'reject']);
     Route::post('/quotes/{id}/convert', [QuoteAdminController::class, 'convert']);
+
+    // Job monitoring
+    Route::get('/jobs/stats',        [JobMonitorController::class, 'stats']);
+    Route::get('/jobs/queue',        [JobMonitorController::class, 'queue']);
+    Route::get('/jobs/failed',       [JobMonitorController::class, 'failed']);
+    Route::delete('/jobs/failed',    [JobMonitorController::class, 'flushFailed']);
+    Route::delete('/jobs/failed/{id}', [JobMonitorController::class, 'deleteFailed']);
 });
 
 
