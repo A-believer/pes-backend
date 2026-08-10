@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\JobMonitorController;
 use App\Http\Middleware\CheckAdminToken;
 
 Route::post('/contact', [SubmissionController::class, 'storeContact']);
+Route::post('/landing-page-lead', [SubmissionController::class, 'storeLandingPageLead']);
 Route::post('/reviews', [SubmissionController::class, 'storeReview']);
 
 // Public Quote endpoints — rate limited to 3 requests per hour per IP
