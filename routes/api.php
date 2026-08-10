@@ -7,6 +7,14 @@ use App\Http\Controllers\Admin\QuoteAdminController;
 use App\Http\Controllers\Admin\JobMonitorController;
 use App\Http\Middleware\CheckAdminToken;
 
+// Handle browser CORS preflight OPTIONS requests for all API endpoints
+Route::options('/{any}', function () {
+    return response('', 200)
+        ->header('Access-Control-Allow-Origin', '*')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, X-XSRF-TOKEN');
+})->where('any', '.*');
+
 Route::post('/contact', [SubmissionController::class, 'storeContact']);
 Route::post('/landing-page-lead', [SubmissionController::class, 'storeLandingPageLead']);
 Route::post('/reviews', [SubmissionController::class, 'storeReview']);
