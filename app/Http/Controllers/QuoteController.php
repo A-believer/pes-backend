@@ -39,6 +39,7 @@ class QuoteController extends Controller {
             'address'              => $v['address'],
             'postcode'             => strtoupper($v['postcode']),
             'city'                 => $v['city'],
+            'landing_page_slug'    => $v['landingPageSlug'] ?? null,
             'property_type'        => $v['propertyType'],
             'floor_area'           => $v['floorArea'],
             'floors'               => $v['floors'],
@@ -63,6 +64,9 @@ class QuoteController extends Controller {
             'addons_json'    => $v['addOns'] ?? [],
             'photos_json'    => $imageUrls,
             'status'         => 'pending',
+            'utm_source'     => $v['utmSource'] ?? null,
+            'utm_medium'     => $v['utmMedium'] ?? null,
+            'utm_campaign'   => $v['utmCampaign'] ?? null,
         ]);
 
         // --- Persist image records ---

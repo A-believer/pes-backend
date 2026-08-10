@@ -51,6 +51,10 @@ class StoreQuoteRequest extends FormRequest {
             'postcode'      => 'required|string|max:15',
             'address'       => 'required|string|max:250',
             'city'          => 'required|string|max:100',
+            'landingPageSlug' => 'nullable|string|max:100',
+            'utmSource'       => 'nullable|string|max:100',
+            'utmMedium'       => 'nullable|string|max:100',
+            'utmCampaign'     => 'nullable|string|max:100',
         ];
     }
 

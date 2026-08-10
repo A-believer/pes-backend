@@ -16,6 +16,7 @@ class QuoteRequest extends Model {
         'address',
         'postcode',
         'city',
+        'landing_page_slug',
         'property_type',
         'floor_area',
         'floors',
@@ -36,6 +37,9 @@ class QuoteRequest extends Model {
         'recommended_cleaners',
         'status',
         'admin_notes',
+        'utm_source',
+        'utm_medium',
+        'utm_campaign',
     ];
 
     protected $casts = [

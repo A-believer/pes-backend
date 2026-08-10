@@ -22,20 +22,28 @@ class SubmissionController extends Controller {
             'company' => 'required|string|max:100',
             'serviceRequired' => 'required|string|max:100',
             'postcode' => 'required|string|max:15',
-            'message' => 'required|string|min:10'
+            'message' => 'required|string|min:10',
+            'landingPageSlug' => 'nullable|string|max:100',
+            'utmSource' => 'nullable|string|max:100',
+            'utmMedium' => 'nullable|string|max:100',
+            'utmCampaign' => 'nullable|string|max:100',
         ]);
 
         $name = trim($validated['firstName'] . ' ' . $validated['lastName']);
 
         $submission = Submission::create([
             'type' => 'contact',
+            'landing_page_slug' => $validated['landingPageSlug'] ?? null,
             'name' => $name,
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'company' => $validated['company'],
             'service' => $validated['serviceRequired'],
             'postcode' => $validated['postcode'],
-            'message' => $validated['message']
+            'message' => $validated['message'],
+            'utm_source' => $validated['utmSource'] ?? null,
+            'utm_medium' => $validated['utmMedium'] ?? null,
+            'utm_campaign' => $validated['utmCampaign'] ?? null,
         ]);
 
         // Dispatch email notifications

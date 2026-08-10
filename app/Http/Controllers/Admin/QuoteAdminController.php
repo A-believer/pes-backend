@@ -150,6 +150,16 @@ class QuoteAdminController extends Controller {
         $byPropertyType  = QuoteRequest::selectRaw('property_type, COUNT(*) as count')
             ->groupBy('property_type')->pluck('count', 'property_type');
 
+        $byLocation = QuoteRequest::selectRaw('city, COUNT(*) as total_leads, SUM(CASE WHEN status IN ("approved", "converted_to_booking") THEN 1 ELSE 0 END) as converted_leads, AVG(quote_max) as avg_max_quote')
+            ->groupBy('city')
+            ->orderBy('total_leads', 'desc')
+            ->get();
+
+        $byLandingPage = QuoteRequest::selectRaw('COALESCE(landing_page_slug, "main") as slug, COUNT(*) as total_leads, SUM(CASE WHEN status IN ("approved", "converted_to_booking") THEN 1 ELSE 0 END) as converted_leads')
+            ->groupBy('landing_page_slug')
+            ->orderBy('total_leads', 'desc')
+            ->get();
+
         $recentVolume = QuoteRequest::selectRaw('DATE(created_at) as date, COUNT(*) as count')
             ->where('created_at', '>=', now()->subDays(30))
             ->groupBy('date')
@@ -169,6 +179,8 @@ class QuoteAdminController extends Controller {
             'avg_quote_max'   => round($avgQuoteMax ?? 0, 2),
             'by_service_type' => $byServiceType,
             'by_property_type'=> $byPropertyType,
+            'by_location'     => $byLocation,
+            'by_landing_page' => $byLandingPage,
             'recent_volume'   => $recentVolume,
         ]);
     }
