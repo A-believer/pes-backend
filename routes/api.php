@@ -5,6 +5,7 @@ use App\Http\Controllers\SubmissionController;
 use App\Http\Controllers\QuoteController;
 use App\Http\Controllers\Admin\QuoteAdminController;
 use App\Http\Controllers\Admin\JobMonitorController;
+use App\Http\Controllers\Admin\InvoiceAdminController;
 use App\Http\Middleware\CheckAdminToken;
 
 // Handle browser CORS preflight OPTIONS requests for all API endpoints
@@ -43,6 +44,16 @@ Route::middleware([CheckAdminToken::class])->prefix('admin')->group(function () 
     Route::get('/jobs/failed',       [JobMonitorController::class, 'failed']);
     Route::delete('/jobs/failed',    [JobMonitorController::class, 'flushFailed']);
     Route::delete('/jobs/failed/{id}', [JobMonitorController::class, 'deleteFailed']);
+
+    // Invoices & Receipts
+    Route::get('/invoices',                  [InvoiceAdminController::class, 'index']);
+    Route::post('/invoices',                 [InvoiceAdminController::class, 'store']);
+    Route::get('/invoices/{id}',             [InvoiceAdminController::class, 'show']);
+    Route::put('/invoices/{id}',             [InvoiceAdminController::class, 'update']);
+    Route::delete('/invoices/{id}',          [InvoiceAdminController::class, 'destroy']);
+    Route::post('/invoices/{id}/send-email', [InvoiceAdminController::class, 'sendEmail']);
+    Route::post('/invoices/{id}/record-payment', [InvoiceAdminController::class, 'recordPayment']);
+    Route::get('/invoices/{id}/pdf',         [InvoiceAdminController::class, 'pdf']);
 });
 
 
