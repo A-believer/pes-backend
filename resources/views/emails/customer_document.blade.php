@@ -229,17 +229,17 @@
                     </div>
                     <div class="summary-row">
                         <span class="summary-label">Issue Date</span>
-                        <span class="summary-value">{{ $invoice->issue_date ? $invoice->issue_date->format('d M Y') : date('d M Y') }}</span>
+                        <span class="summary-value">{{ $invoice->issue_date ? \Carbon\Carbon::parse($invoice->issue_date)->format('d M Y') : date('d M Y') }}</span>
                     </div>
                     @if($invoice->document_type === 'receipt' && $invoice->payment_date)
                         <div class="summary-row">
                             <span class="summary-label">Date Paid</span>
-                            <span class="summary-value" style="color: #059669;">{{ $invoice->payment_date->format('d M Y') }}</span>
+                            <span class="summary-value" style="color: #059669;">{{ \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') }}</span>
                         </div>
                     @elseif($invoice->due_date)
                         <div class="summary-row">
                             <span class="summary-label">Payment Due</span>
-                            <span class="summary-value" style="color: #dc2626;">{{ $invoice->due_date->format('d M Y') }}</span>
+                            <span class="summary-value" style="color: #dc2626;">{{ \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') }}</span>
                         </div>
                     @endif
                     <div class="summary-row">
@@ -300,8 +300,16 @@
                     </div>
                 @endif
 
-                <div class="pdf-pill">
-                    &#128206; A complete, printable PDF copy (<strong>{{ $invoice->document_number }}.pdf</strong>) has been attached to this email.
+                @if(!empty($pdfDownloadUrl))
+                    <div style="text-align: center; margin: 26px 0 16px 0;">
+                        <a href="{{ $pdfDownloadUrl }}" target="_blank" style="display: inline-block; background-color: #0f172a; color: #ffffff; padding: 13px 26px; border-radius: 10px; font-weight: 800; font-size: 13px; text-decoration: none; letter-spacing: 0.05em; text-transform: uppercase; box-shadow: 0 4px 12px rgba(15, 23, 42, 0.25);">
+                            &#128196; Download Official PDF ({{ $invoice->document_number }}.pdf)
+                        </a>
+                    </div>
+                @endif
+
+                <div class="pdf-pill" style="display: block; text-align: center;">
+                    &#128206; The official A4 PDF (<strong>{{ $invoice->document_number }}.pdf</strong>) has been attached to this email.
                 </div>
 
                 <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0;">

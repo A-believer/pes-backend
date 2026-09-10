@@ -358,7 +358,10 @@ class InvoiceAdminController extends Controller {
         $customMessage = $validated['message'] ?? null;
 
         try {
-            $mail = new CustomerDocumentMail($invoice, $subject, $customMessage);
+            $signature = hash_hmac('sha256', $invoice->document_number . '|' . $recipient, config('app.key'));
+            $pdfDownloadUrl = url("/api/public/invoices/{$invoice->document_number}/pdf?auth={$signature}");
+
+            $mail = new CustomerDocumentMail($invoice, $subject, $customMessage, $pdfDownloadUrl);
             $pendingMail = Mail::to($recipient);
             if ($cc) {
                 $pendingMail->cc($cc);
@@ -436,6 +439,114 @@ class InvoiceAdminController extends Controller {
      */
     public function pdf(int $id): Response {
         $invoice = Invoice::with('items')->findOrFail($id);
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'Helvetica');
+        $dompdf = new Dompdf($options);
+
+        $html = view('pdf.document_pdf', ['invoice' => $invoice])->render();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        return response($dompdf->output(), 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => "inline; filename=\"{$invoice->document_number}.pdf\"",
+        ]);
+    }
+
+    /**
+     * POST /api/admin/invoices/preview-pdf
+     * Direct binary vector PDF generation for unsaved / live draft documents
+     */
+    public function previewPdf(Request $request): Response {
+        $validated = $request->validate([
+            'document_type'        => 'nullable|in:invoice,receipt',
+            'document_number'      => 'nullable|string',
+            'quote_request_id'     => 'nullable|integer',
+            'customer_name'        => 'nullable|string',
+            'customer_email'       => 'nullable|string',
+            'customer_phone'       => 'nullable|string',
+            'customer_company'     => 'nullable|string',
+            'billing_address'      => 'nullable|string',
+            'service_address'      => 'nullable|string',
+            'service_type'         => 'nullable|string',
+            'work_status'          => 'nullable|in:work_to_be_done,work_done',
+            'work_scheduled_date'  => 'nullable|string',
+            'work_completed_date'  => 'nullable|string',
+            'issue_date'           => 'nullable|string',
+            'due_date'             => 'nullable|string',
+            'payment_date'         => 'nullable|string',
+            'payment_method'       => 'nullable|string',
+            'payment_reference'    => 'nullable|string',
+            'status'               => 'nullable|string',
+            'currency'             => 'nullable|string',
+            'subtotal'             => 'nullable|numeric',
+            'discount_amount'      => 'nullable|numeric',
+            'tax_rate'             => 'nullable|numeric',
+            'tax_amount'           => 'nullable|numeric',
+            'total_amount'         => 'nullable|numeric',
+            'amount_paid'          => 'nullable|numeric',
+            'balance_due'          => 'nullable|numeric',
+            'bank_details_json'    => 'nullable|array',
+            'notes'                => 'nullable|string',
+            'terms_and_conditions' => 'nullable|string',
+            'items'                => 'nullable|array',
+        ]);
+
+        $invoice = new Invoice($validated);
+        $itemsCollection = collect();
+        if (!empty($validated['items'])) {
+            foreach ($validated['items'] as $itemData) {
+                $itemsCollection->push(new InvoiceItem($itemData));
+            }
+        } else {
+            $itemsCollection->push(new InvoiceItem([
+                'description' => $validated['service_type'] ?? 'Specialist Service (Standard Scope)',
+                'quantity'    => 1,
+                'unit_price'  => $validated['subtotal'] ?? 0,
+                'tax_rate'    => $validated['tax_rate'] ?? 20,
+                'tax_amount'  => $validated['tax_amount'] ?? 0,
+                'total_price' => $validated['subtotal'] ?? 0,
+                'sort_order'  => 1,
+            ]));
+        }
+        $invoice->setRelation('items', $itemsCollection);
+
+        $options = new Options();
+        $options->set('isRemoteEnabled', true);
+        $options->set('defaultFont', 'Helvetica');
+        $dompdf = new Dompdf($options);
+
+        $html = view('pdf.document_pdf', ['invoice' => $invoice])->render();
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $filename = ($invoice->document_number ?: 'draft_document') . '.pdf';
+
+        return response($dompdf->output(), 200, [
+            'Content-Type'        => 'application/pdf',
+            'Content-Disposition' => "inline; filename=\"{$filename}\"",
+        ]);
+    }
+
+    /**
+     * GET /api/public/invoices/{documentNumber}/pdf
+     * Secure public customer PDF download
+     */
+    public function publicPdf(Request $request, string $documentNumber): Response {
+        $invoice = Invoice::with('items')->where('document_number', $documentNumber)->firstOrFail();
+
+        $auth = $request->query('auth');
+        if ($auth) {
+            $expected = hash_hmac('sha256', $invoice->document_number . '|' . $invoice->customer_email, config('app.key'));
+            $expectedLast = $invoice->email_last_sent_to ? hash_hmac('sha256', $invoice->document_number . '|' . $invoice->email_last_sent_to, config('app.key')) : null;
+            if (!hash_equals($expected, $auth) && (!$expectedLast || !hash_equals($expectedLast, $auth))) {
+                abort(403, 'Invalid document access signature.');
+            }
+        }
 
         $options = new Options();
         $options->set('isRemoteEnabled', true);

@@ -192,11 +192,11 @@
                 <div class="doc-title">{{ $invoice->document_type === 'receipt' ? 'Official Receipt' : 'Invoice' }}</div>
                 <div class="doc-num">#{{ $invoice->document_number }}</div>
                 <div class="doc-meta">
-                    <strong>Date Issued:</strong> {{ $invoice->issue_date ? $invoice->issue_date->format('d M Y') : date('d M Y') }}<br>
+                    <strong>Date Issued:</strong> {{ $invoice->issue_date ? \Carbon\Carbon::parse($invoice->issue_date)->format('d M Y') : date('d M Y') }}<br>
                     @if($invoice->document_type === 'receipt' && $invoice->payment_date)
-                        <strong>Date Paid:</strong> {{ $invoice->payment_date->format('d M Y') }}<br>
+                        <strong>Date Paid:</strong> {{ \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') }}<br>
                     @elseif($invoice->due_date)
-                        <strong>Payment Due:</strong> {{ $invoice->due_date->format('d M Y') }}<br>
+                        <strong>Payment Due:</strong> {{ \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') }}<br>
                     @endif
                     @if($invoice->payment_method)
                         <strong>Method:</strong> {{ $invoice->payment_method }}<br>
@@ -212,12 +212,12 @@
         @if($invoice->work_status === 'work_done')
             <strong>WORK COMPLETED &amp; CERTIFIED</strong>
             @if($invoice->work_completed_date)
-                &mdash; Completion Signed Off: {{ $invoice->work_completed_date->format('d M Y') }}
+                &mdash; Completion Signed Off: {{ \Carbon\Carbon::parse($invoice->work_completed_date)->format('d M Y') }}
             @endif
         @else
             <strong>WORK TO BE COMPLETED</strong>
             @if($invoice->work_scheduled_date)
-                &mdash; Scheduled Execution: {{ $invoice->work_scheduled_date->format('d M Y') }}
+                &mdash; Scheduled Execution: {{ \Carbon\Carbon::parse($invoice->work_scheduled_date)->format('d M Y') }}
             @else
                 &mdash; Scheduled date to be finalized upon deposit
             @endif
@@ -305,7 +305,7 @@
                     <div class="paid-stamp">
                         <div style="font-size: 13px; font-weight: 900; letter-spacing: 1px;">PAID IN FULL &bull; OFFICIAL RECEIPT</div>
                         <div style="font-size: 9px; margin-top: 3px;">
-                            Payment verified on {{ $invoice->payment_date ? $invoice->payment_date->format('d M Y') : date('d M Y') }}. Thank you for choosing Premium Expert Services.
+                            Payment verified on {{ $invoice->payment_date ? \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') : date('d M Y') }}. Thank you for choosing Premium Expert Services.
                         </div>
                     </div>
                 @else

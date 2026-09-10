@@ -48,6 +48,7 @@ Route::middleware([CheckAdminToken::class])->prefix('admin')->group(function () 
     // Invoices & Receipts
     Route::get('/invoices',                  [InvoiceAdminController::class, 'index']);
     Route::post('/invoices',                 [InvoiceAdminController::class, 'store']);
+    Route::post('/invoices/preview-pdf',     [InvoiceAdminController::class, 'previewPdf']);
     Route::get('/invoices/{id}',             [InvoiceAdminController::class, 'show']);
     Route::put('/invoices/{id}',             [InvoiceAdminController::class, 'update']);
     Route::delete('/invoices/{id}',          [InvoiceAdminController::class, 'destroy']);
@@ -55,6 +56,9 @@ Route::middleware([CheckAdminToken::class])->prefix('admin')->group(function () 
     Route::post('/invoices/{id}/record-payment', [InvoiceAdminController::class, 'recordPayment']);
     Route::get('/invoices/{id}/pdf',         [InvoiceAdminController::class, 'pdf']);
 });
+
+// Public customer invoice/receipt PDF download
+Route::get('/public/invoices/{document_number}/pdf', [InvoiceAdminController::class, 'publicPdf']);
 
 
 // Secure utility route to run migrations via browser (lifesaver if cPanel SSH/Terminal is disabled)
