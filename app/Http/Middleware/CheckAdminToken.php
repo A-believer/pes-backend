@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class CheckAdminToken {
     public function handle(Request $request, Closure $next): Response {
-        $token = $request->bearerToken();
+        $token = $request->bearerToken() ?: $request->query('token');
         $adminKey = env('ADMIN_API_KEY');
 
         if (!$token || $token !== $adminKey) {
