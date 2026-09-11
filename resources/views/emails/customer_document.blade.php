@@ -28,13 +28,20 @@
         }
         .header {
             background-color: #0f172a;
-            padding: 32px 24px;
+            padding: 28px 24px;
             text-align: center;
-            border-bottom: 4px solid {{ $invoice->document_type === 'receipt' ? '#059669' : '#d97706' }};
+            border-bottom: 4px solid {{ $invoice->document_type === 'receipt' ? '#059669' : '#2563eb' }};
+        }
+        .header img {
+            max-height: 46px;
+            width: auto;
+            max-width: 220px;
+            margin-bottom: 10px;
+            display: inline-block;
         }
         .header h1 {
             color: #ffffff;
-            font-size: 20px;
+            font-size: 18px;
             font-weight: 800;
             letter-spacing: 0.05em;
             text-transform: uppercase;
@@ -56,8 +63,8 @@
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            background-color: {{ $invoice->document_type === 'receipt' ? '#d1fae5' : '#fef3c7' }};
-            color: {{ $invoice->document_type === 'receipt' ? '#065f46' : '#92400e' }};
+            background-color: {{ $invoice->document_type === 'receipt' ? '#d1fae5' : '#eff6ff' }};
+            color: {{ $invoice->document_type === 'receipt' ? '#065f46' : '#1e40af' }};
             border-radius: 9999px;
             margin-bottom: 18px;
         }
@@ -115,7 +122,7 @@
         }
         .highlight-balance {
             font-size: 16px;
-            color: {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#059669' : '#d97706' }};
+            color: {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#059669' : '#2563eb' }};
             font-weight: 800;
         }
         .bank-details {
@@ -129,7 +136,7 @@
         }
         .bank-details h4 {
             margin: 0 0 8px 0;
-            color: #f59e0b;
+            color: #38bdf8;
             font-size: 12px;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -181,8 +188,11 @@
         <div class="container">
             <!-- Header -->
             <div class="header">
-                <h1>Premium Expert Services</h1>
-                <p>Commercial & Domestic Property Specialists</p>
+                <div style="text-align: center; margin-bottom: 8px;">
+                    <img src="https://expets.co.uk/footer-logo.png" alt="Premium Expert Services Limited" />
+                </div>
+                <h1>Premium Expert Services Limited</h1>
+                <p>Commercial &amp; Domestic Property Specialists &bull; UK Nationwide</p>
             </div>
 
             <!-- Main Content -->
@@ -285,7 +295,7 @@
                     @php
                         $bank = $invoice->bank_details_json ?: [
                             'bank_name' => 'Barclays Bank UK',
-                            'account_name' => 'Premium Expert Services Ltd',
+                            'account_name' => 'Premium Expert Services Limited',
                             'sort_code' => '20-00-00',
                             'account_number' => '87654321',
                         ];
@@ -293,10 +303,10 @@
                     <div class="bank-details">
                         <h4>Bank Transfer Instructions (BACS)</h4>
                         Bank: <strong>{{ $bank['bank_name'] ?? 'Barclays Bank UK' }}</strong><br>
-                        Account Name: <strong>{{ $bank['account_name'] ?? 'Premium Expert Services Ltd' }}</strong><br>
+                        Account Name: <strong>{{ $bank['account_name'] ?? 'Premium Expert Services Limited' }}</strong><br>
                         Sort Code: <strong>{{ $bank['sort_code'] ?? '20-00-00' }}</strong><br>
                         Account Number: <strong>{{ $bank['account_number'] ?? '87654321' }}</strong><br>
-                        Payment Reference: <strong style="color: #f59e0b;">{{ $invoice->document_number }}</strong>
+                        Payment Reference: <strong style="color: #60a5fa;">{{ $invoice->document_number }}</strong>
                     </div>
                 @endif
 
@@ -313,17 +323,17 @@
                 </div>
 
                 <p style="font-size: 13px; color: #64748b; line-height: 1.5; margin: 0;">
-                    If you have any questions or require modifications to your booking, please reply to this email or call our team at <strong>0800 123 4567</strong>.
+                    If you have any questions or require modifications to your booking, please reply to this email or call our team at <strong>07368239696</strong>.
                 </p>
             </div>
 
             <!-- Footer -->
             <div class="footer">
-                <p style="margin: 0 0 6px 0; font-weight: 600; color: #64748b;">
-                    Premium Expert Services Ltd &bull; Registered in England &amp; Wales #14829104
+                <p style="margin: 0 0 6px 0; font-weight: 700; color: #475569;">
+                    PREMIUM EXPERT SERVICES LIMITED &bull; Company Reg #14829104
                 </p>
-                <p style="margin: 0;">
-                    Suite 402, Enterprise House, Business Way, London &bull; VAT GB 432 9812 04
+                <p style="margin: 0; color: #64748b;">
+                    UK Nationwide Property Specialists &bull; Tel: 07368239696 &bull; info@expets.co.uk &bull; https://expets.co.uk
                 </p>
             </div>
         </div>

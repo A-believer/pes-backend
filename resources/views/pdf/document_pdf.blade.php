@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <title>{{ $invoice->document_number }}</title>
+    @php
+        $logoPath = public_path('images/logo.png');
+        if (!file_exists($logoPath)) {
+            $logoPath = base_path('../website/public/logo.png');
+        }
+        $logoBase64 = file_exists($logoPath) ? 'data:image/png;base64,' . base64_encode(file_get_contents($logoPath)) : null;
+    @endphp
     <style>
         @page {
             size: a4 portrait;
-            margin: 15mm;
+            margin: 14mm 15mm;
         }
         body {
             font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -18,12 +25,12 @@
         }
         .header-table {
             width: 100%;
-            border-bottom: 2px solid #0f172a;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
+            border-bottom: 2.5px solid #2563eb;
+            padding-bottom: 14px;
+            margin-bottom: 14px;
         }
         .logo-box {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 900;
             color: #0f172a;
             text-transform: uppercase;
@@ -32,16 +39,16 @@
         .tagline {
             font-size: 9px;
             font-weight: bold;
-            color: #d97706;
+            color: #2563eb;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 2px;
+            letter-spacing: 0.8px;
+            margin-top: 3px;
         }
         .company-meta {
             font-size: 9px;
             color: #64748b;
-            margin-top: 5px;
-            line-height: 1.3;
+            margin-top: 4px;
+            line-height: 1.35;
         }
         .doc-title {
             font-size: 22px;
@@ -66,18 +73,18 @@
             line-height: 1.4;
         }
         .work-status-banner {
-            background-color: {{ $invoice->work_status === 'work_done' ? '#ecfdf5' : '#fffbeb' }};
-            border: 1px solid {{ $invoice->work_status === 'work_done' ? '#a7f3d0' : '#fde68a' }};
-            color: {{ $invoice->work_status === 'work_done' ? '#065f46' : '#92400e' }};
-            padding: 8px 12px;
+            background-color: {{ $invoice->work_status === 'work_done' ? '#ecfdf5' : '#eff6ff' }};
+            border: 1px solid {{ $invoice->work_status === 'work_done' ? '#a7f3d0' : '#bfdbfe' }};
+            color: {{ $invoice->work_status === 'work_done' ? '#065f46' : '#1e40af' }};
+            padding: 7px 12px;
             font-weight: bold;
             font-size: 10px;
             border-radius: 4px;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
         }
         .parties-table {
             width: 100%;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
             border-radius: 6px;
@@ -103,7 +110,7 @@
         .items-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
         }
         .items-table th {
             background-color: #0f172a;
@@ -114,6 +121,7 @@
             letter-spacing: 0.5px;
             padding: 7px 10px;
             text-align: left;
+            border-bottom: 2px solid #2563eb;
         }
         .items-table td {
             padding: 8px 10px;
@@ -143,14 +151,16 @@
             border-top: 1px solid #cbd5e1;
         }
         .balance-row {
-            background-color: {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#d1fae5' : '#fef3c7' }};
+            background-color: {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#d1fae5' : '#eff6ff' }};
             font-weight: bold;
             font-size: 11px;
-            color: {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#065f46' : '#78350f' }};
+            color: {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#065f46' : '#1e40af' }};
+            border-top: 1.5px solid {{ ($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0) ? '#a7f3d0' : '#bfdbfe' }};
         }
         .bank-box {
             background-color: #f8fafc;
             border: 1px solid #e2e8f0;
+            border-left: 3.5px solid #2563eb;
             padding: 10px;
             border-radius: 6px;
             font-size: 9px;
@@ -166,7 +176,7 @@
             text-align: center;
         }
         .footer {
-            margin-top: 30px;
+            margin-top: 25px;
             border-top: 1px solid #e2e8f0;
             padding-top: 8px;
             font-size: 8px;
@@ -179,16 +189,20 @@
     <!-- HEADER -->
     <table class="header-table" cellpadding="0" cellspacing="0">
         <tr>
-            <td style="vertical-align: top; width: 60%;">
-                <div class="logo-box">Premium Expert Services</div>
-                <div class="tagline">Domestic & Commercial Specialists</div>
+            <td style="vertical-align: middle; width: 55%;">
+                @if($logoBase64)
+                    <img src="{{ $logoBase64 }}" style="height: 38px; width: auto; max-width: 170px; margin-bottom: 4px;" alt="Logo" />
+                @else
+                    <div class="logo-box">Premium Expert Services Limited</div>
+                @endif
+                <div class="tagline">Commercial &amp; Domestic Specialists &bull; UK Nationwide</div>
                 <div class="company-meta">
-                    Suite 402, Enterprise House, Business Way, London, UK<br>
-                    Reg: 14829104 &bull; VAT ID: GB 432 9812 04<br>
-                    Tel: 0800 123 4567 &bull; billing@expets.co.uk &bull; https://expets.co.uk
+                    Head Office &bull; UK Nationwide Support &bull; United Kingdom<br>
+                    Company Reg: 14829104 &bull; United Kingdom<br>
+                    Tel: <strong>07368239696</strong> &bull; info@expets.co.uk &bull; https://expets.co.uk
                 </div>
             </td>
-            <td style="vertical-align: top; width: 40%;">
+            <td style="vertical-align: top; width: 45%;">
                 <div class="doc-title">{{ $invoice->document_type === 'receipt' ? 'Official Receipt' : 'Invoice' }}</div>
                 <div class="doc-num">#{{ $invoice->document_number }}</div>
                 <div class="doc-meta">
@@ -312,7 +326,7 @@
                     @php
                         $bank = $invoice->bank_details_json ?: [
                             'bank_name' => 'Barclays Bank UK',
-                            'account_name' => 'Premium Expert Services Ltd',
+                            'account_name' => 'Premium Expert Services Limited',
                             'sort_code' => '20-00-00',
                             'account_number' => '87654321',
                         ];
@@ -320,9 +334,9 @@
                     <div class="bank-box">
                         <strong style="font-size: 10px; color: #0f172a; text-transform: uppercase;">Bank Transfer Details (BACS)</strong><br>
                         Bank: {{ $bank['bank_name'] ?? 'Barclays Bank UK' }}<br>
-                        Account Name: {{ $bank['account_name'] ?? 'Premium Expert Services Ltd' }}<br>
+                        Account Name: {{ $bank['account_name'] ?? 'Premium Expert Services Limited' }}<br>
                         Sort Code: <strong>{{ $bank['sort_code'] ?? '20-00-00' }}</strong> &bull; Account No: <strong>{{ $bank['account_number'] ?? '87654321' }}</strong><br>
-                        Reference: <strong style="color: #b45309;">{{ $invoice->document_number }}</strong>
+                        Reference: <strong style="color: #1e40af;">{{ $invoice->document_number }}</strong>
                     </div>
                 @endif
 
@@ -372,7 +386,7 @@
 
     <!-- FOOTER -->
     <div class="footer">
-        Premium Expert Services Ltd &bull; Registered in England &amp; Wales &bull; Company No. 14829104 &bull; Page 1 of 1
+        PREMIUM EXPERT SERVICES LIMITED &bull; Registered in England &amp; Wales &bull; Company No. 14829104 &bull; Support: info@expets.co.uk &bull; Tel: 07368239696 &bull; Page 1 of 1
     </div>
 </body>
 </html>
