@@ -321,21 +321,32 @@
                         <div style="font-size: 9px; margin-top: 3px;">
                             Payment verified on {{ $invoice->payment_date ? \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') : date('d M Y') }}. Thank you for choosing Premium Expert Services.
                         </div>
+                        @php
+                            $bank = $invoice->bank_details_json ?: [
+                                'bank_name' => 'HSBC UK',
+                                'account_name' => 'Joseph Awe',
+                                'sort_code' => '40-12-63',
+                                'account_number' => '11744895',
+                            ];
+                        @endphp
+                        <div style="font-size: 8px; margin-top: 5px; color: #065f46; border-top: 1px dashed #a7f3d0; padding-top: 4px;">
+                            Payment Account: <strong>{{ $bank['account_name'] }}</strong> &bull; Bank: <strong>{{ $bank['bank_name'] }}</strong> &bull; Sort Code: <strong>{{ $bank['sort_code'] }}</strong> &bull; Acc: <strong>{{ $bank['account_number'] }}</strong>
+                        </div>
                     </div>
                 @else
                     @php
                         $bank = $invoice->bank_details_json ?: [
-                            'bank_name' => 'Barclays Bank UK',
-                            'account_name' => 'Premium Expert Services Limited',
-                            'sort_code' => '20-00-00',
-                            'account_number' => '87654321',
+                            'bank_name' => 'HSBC UK',
+                            'account_name' => 'Joseph Awe',
+                            'sort_code' => '40-12-63',
+                            'account_number' => '11744895',
                         ];
                     @endphp
                     <div class="bank-box">
                         <strong style="font-size: 10px; color: #0f172a; text-transform: uppercase;">Bank Transfer Details (BACS)</strong><br>
-                        Bank: {{ $bank['bank_name'] ?? 'Barclays Bank UK' }}<br>
-                        Account Name: {{ $bank['account_name'] ?? 'Premium Expert Services Limited' }}<br>
-                        Sort Code: <strong>{{ $bank['sort_code'] ?? '20-00-00' }}</strong> &bull; Account No: <strong>{{ $bank['account_number'] ?? '87654321' }}</strong><br>
+                        Bank: {{ $bank['bank_name'] ?? 'HSBC UK' }}<br>
+                        Account Name: {{ $bank['account_name'] ?? 'Joseph Awe' }}<br>
+                        Sort Code: <strong>{{ $bank['sort_code'] ?? '40-12-63' }}</strong> &bull; Account No: <strong>{{ $bank['account_number'] ?? '11744895' }}</strong><br>
                         Reference: <strong style="color: #1e40af;">{{ $invoice->document_number }}</strong>
                     </div>
                 @endif

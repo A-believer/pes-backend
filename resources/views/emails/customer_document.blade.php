@@ -294,19 +294,31 @@
                 @if($invoice->status !== 'paid' && $invoice->document_type !== 'receipt' && $invoice->balance_due > 0)
                     @php
                         $bank = $invoice->bank_details_json ?: [
-                            'bank_name' => 'Barclays Bank UK',
-                            'account_name' => 'Premium Expert Services Limited',
-                            'sort_code' => '20-00-00',
-                            'account_number' => '87654321',
+                            'bank_name' => 'HSBC UK',
+                            'account_name' => 'Joseph Awe',
+                            'sort_code' => '40-12-63',
+                            'account_number' => '11744895',
                         ];
                     @endphp
                     <div class="bank-details">
                         <h4>Bank Transfer Instructions (BACS)</h4>
-                        Bank: <strong>{{ $bank['bank_name'] ?? 'Barclays Bank UK' }}</strong><br>
-                        Account Name: <strong>{{ $bank['account_name'] ?? 'Premium Expert Services Limited' }}</strong><br>
-                        Sort Code: <strong>{{ $bank['sort_code'] ?? '20-00-00' }}</strong><br>
-                        Account Number: <strong>{{ $bank['account_number'] ?? '87654321' }}</strong><br>
+                        Bank: <strong>{{ $bank['bank_name'] ?? 'HSBC UK' }}</strong><br>
+                        Account Name: <strong>{{ $bank['account_name'] ?? 'Joseph Awe' }}</strong><br>
+                        Sort Code: <strong>{{ $bank['sort_code'] ?? '40-12-63' }}</strong><br>
+                        Account Number: <strong>{{ $bank['account_number'] ?? '11744895' }}</strong><br>
                         Payment Reference: <strong style="color: #60a5fa;">{{ $invoice->document_number }}</strong>
+                    </div>
+                @else
+                    @php
+                        $bank = $invoice->bank_details_json ?: [
+                            'bank_name' => 'HSBC UK',
+                            'account_name' => 'Joseph Awe',
+                            'sort_code' => '40-12-63',
+                            'account_number' => '11744895',
+                        ];
+                    @endphp
+                    <div style="margin-top: 15px; padding: 12px 16px; background-color: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 8px; font-size: 11px; color: #166534;">
+                        <strong>Payment Record:</strong> Received into {{ $bank['account_name'] }} ({{ $bank['bank_name'] }} &bull; Sort Code: {{ $bank['sort_code'] }} &bull; Acc: {{ $bank['account_number'] }}). Thank you for your payment!
                     </div>
                 @endif
 

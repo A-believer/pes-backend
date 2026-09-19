@@ -206,7 +206,13 @@ class InvoiceAdminController extends Controller {
                 'total_amount'         => $totalAmount,
                 'amount_paid'          => $amountPaid,
                 'balance_due'          => $balanceDue,
-                'bank_details_json'    => $validated['bank_details_json'] ?? null,
+                'bank_details_json'    => $validated['bank_details_json'] ?? [
+                    'bank_name'                => 'HSBC UK',
+                    'account_name'             => 'Joseph Awe',
+                    'sort_code'                => '40-12-63',
+                    'account_number'           => '11744895',
+                    'payment_reference_format' => $docNumber,
+                ],
                 'notes'                => $validated['notes'] ?? null,
                 'terms_and_conditions' => $validated['terms_and_conditions'] ?? null,
             ]);
