@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Submission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 use App\Mail\QuoteRequestMail;
 use App\Mail\ReviewMail;
+use App\Mail\CareerApplicationMail;
 
 class SubmissionController extends Controller {
     public function index() {
@@ -135,5 +137,78 @@ class SubmissionController extends Controller {
         }
 
         return response()->json(['message' => 'Review registered successfully'], 201);
+    }
+
+    public function storeCareer(Request $request) {
+        $validated = $request->validate([
+            'fullName'        => 'nullable|string|max:150',
+            'name'            => 'nullable|string|max:150',
+            'email'           => 'required|email|max:150',
+            'phone'           => 'required|string|max:30',
+            'postcode'        => 'required|string|max:20',
+            'roleAppliedFor'  => 'nullable|string|max:150',
+            'service'         => 'nullable|string|max:150',
+            'availability'    => 'nullable|string|max:100',
+            'experienceLevel' => 'nullable|string|max:100',
+            'hasRightToWork'  => 'nullable',
+            'hasDrivingLicence' => 'nullable',
+            'notes'           => 'nullable|string|max:3000',
+            'cvFile'          => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+        ]);
+
+        $name = !empty($validated['fullName']) ? $validated['fullName'] : ($validated['name'] ?? '');
+        if (empty($name)) {
+            return response()->json(['error' => 'Full name is required.'], 422);
+        }
+
+        $role = !empty($validated['roleAppliedFor']) ? $validated['roleAppliedFor'] : ($validated['service'] ?? 'Cleaning Operative / Cleaner');
+        $hasRightToWork = filter_var($validated['hasRightToWork'] ?? true, FILTER_VALIDATE_BOOLEAN);
+        $hasDrivingLicence = filter_var($validated['hasDrivingLicence'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+        $cvPath = null;
+        $cvOriginalName = null;
+        if ($request->hasFile('cvFile') && $request->file('cvFile')->isValid()) {
+            $file = $request->file('cvFile');
+            $cvOriginalName = $file->getClientOriginalName();
+            $cvPath = $file->store('resumes', 'public');
+        }
+
+        $submission = Submission::create([
+            'type'                => 'career',
+            'name'                => $name,
+            'email'               => $validated['email'],
+            'phone'               => $validated['phone'],
+            'service'             => $role,
+            'postcode'            => $validated['postcode'],
+            'message'             => $validated['notes'] ?? 'Career application for ' . $role,
+            'availability'        => $validated['availability'] ?? 'Flexible',
+            'experience_level'    => $validated['experienceLevel'] ?? '1 - 2 years',
+            'has_right_to_work'   => $hasRightToWork,
+            'has_driving_licence' => $hasDrivingLicence,
+            'cv_path'             => $cvPath,
+            'cv_original_name'    => $cvOriginalName,
+        ]);
+
+        try {
+            Mail::to(env('MAIL_TO', 'info@expets.co.uk'))->send(new CareerApplicationMail($submission));
+        } catch (\Exception $e) {
+            // Keep going so submission record is preserved
+        }
+
+        return response()->json([
+            'message' => 'Job application recorded successfully',
+            'submission' => $submission,
+        ], 201);
+    }
+
+    public function downloadCv($id) {
+        $submission = Submission::findOrFail($id);
+
+        if (!$submission->cv_path || !Storage::disk('public')->exists($submission->cv_path)) {
+            return response()->json(['error' => 'No CV file found for this applicant.'], 404);
+        }
+
+        $filename = $submission->cv_original_name ?: basename($submission->cv_path);
+        return Storage::disk('public')->download($submission->cv_path, $filename);
     }
 }

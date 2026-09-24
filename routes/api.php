@@ -19,6 +19,8 @@ Route::options('/{any}', function () {
 Route::post('/contact', [SubmissionController::class, 'storeContact']);
 Route::post('/landing-page-lead', [SubmissionController::class, 'storeLandingPageLead']);
 Route::post('/reviews', [SubmissionController::class, 'storeReview']);
+Route::post('/careers', [SubmissionController::class, 'storeCareer']);
+Route::get('/submissions/{id}/cv', [SubmissionController::class, 'downloadCv']);
 
 // Public Quote endpoints — rate limited to 3 requests per hour per IP
 Route::middleware('throttle:3,60')->group(function () {
