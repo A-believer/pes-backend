@@ -39,7 +39,11 @@ jobs:
             **/.git*
             **/.git*/**
             **/node_modules/**
-            **/.env
+            **/.env*
             tests/**
             phpunit.xml
             README.md
+            database/*.sqlite*
+            storage/logs/*.log
+            storage/app/public/**
+            storage/app/private/**

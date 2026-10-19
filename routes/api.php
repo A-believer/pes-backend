@@ -75,10 +75,19 @@ Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
     try {
         $command = $request->query('fresh') === 'true' ? 'migrate:fresh' : 'migrate';
         \Illuminate\Support\Facades\Artisan::call($command, ['--force' => true]);
+        $output = \Illuminate\Support\Facades\Artisan::output();
+
+        try {
+            \Illuminate\Support\Facades\Artisan::call('storage:link');
+            $output .= "\n" . \Illuminate\Support\Facades\Artisan::output();
+        } catch (\Throwable $t) {
+            // Already linked or not supported
+        }
+
         return response()->json([
-            'message' => 'Migrations completed successfully!',
+            'message' => 'Migrations & storage setup completed successfully!',
             'command_run' => $command,
-            'output' => \Illuminate\Support\Facades\Artisan::output()
+            'output' => $output
         ]);
     } catch (\Exception $e) {
         return response()->json([
