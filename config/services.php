@@ -39,4 +39,12 @@ return [
         'key' => env('GEMINI_API_KEY'),
     ],
 
+    'admin' => [
+        'api_key' => env('ADMIN_API_KEY'),
+    ],
+
+    'mail' => [
+        'to' => env('MAIL_TO', 'info@expets.co.uk'),
+    ],
+
 ];

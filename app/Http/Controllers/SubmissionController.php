@@ -50,7 +50,7 @@ class SubmissionController extends Controller {
 
         // Dispatch email notifications
         try {
-            Mail::to(env('MAIL_TO', 'info@expets.co.uk'))->send(new QuoteRequestMail($submission));
+            Mail::to(config('services.mail.to', 'info@expets.co.uk'))->send(new QuoteRequestMail($submission));
         } catch (\Exception $e) {
             // Keep going even if email fails so DB is not rolled back
         }
@@ -103,7 +103,7 @@ class SubmissionController extends Controller {
         ]);
 
         try {
-            Mail::to(env('MAIL_TO', 'info@expets.co.uk'))->send(new QuoteRequestMail($submission));
+            Mail::to(config('services.mail.to', 'info@expets.co.uk'))->send(new QuoteRequestMail($submission));
         } catch (\Exception $e) {
             // Keep going so DB submission is saved regardless of SMTP status
         }
@@ -131,7 +131,7 @@ class SubmissionController extends Controller {
         ]);
 
         try {
-            Mail::to(env('MAIL_TO', 'info@expets.co.uk'))->send(new ReviewMail($submission));
+            Mail::to(config('services.mail.to', 'info@expets.co.uk'))->send(new ReviewMail($submission));
         } catch (\Exception $e) {
             // Keep going
         }
@@ -190,7 +190,7 @@ class SubmissionController extends Controller {
         ]);
 
         try {
-            Mail::to(env('MAIL_TO', 'info@expets.co.uk'))->send(new CareerApplicationMail($submission));
+            Mail::to(config('services.mail.to', 'info@expets.co.uk'))->send(new CareerApplicationMail($submission));
         } catch (\Exception $e) {
             // Keep going so submission record is preserved
         }

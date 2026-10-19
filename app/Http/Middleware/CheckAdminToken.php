@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class CheckAdminToken {
     public function handle(Request $request, Closure $next): Response {
         $token = $request->bearerToken() ?: $request->query('token');
-        $adminKey = env('ADMIN_API_KEY');
+        $adminKey = config('services.admin.api_key') ?: env('ADMIN_API_KEY');
 
         if (!$token || $token !== $adminKey) {
             return response()->json(['error' => 'Unauthorized access'], 401);

@@ -66,7 +66,7 @@ Route::get('/public/invoices/{document_number}/pdf', [InvoiceAdminController::cl
 // Secure utility route to run migrations via browser (lifesaver if cPanel SSH/Terminal is disabled)
 Route::get('/run-migrations', function (\Illuminate\Http\Request $request) {
     $token = $request->query('token');
-    $adminKey = env('ADMIN_API_KEY');
+    $adminKey = config('services.admin.api_key') ?: env('ADMIN_API_KEY');
 
     if (!$token || $token !== $adminKey) {
         return response()->json(['error' => 'Unauthorized access'], 401);
