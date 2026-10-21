@@ -56,7 +56,7 @@
             text-transform: uppercase;
             letter-spacing: 1px;
             text-align: right;
-            color: {{ $invoice->document_type === 'receipt' ? '#047857' : '#0f172a' }};
+            color: {{ $invoice->document_type === 'receipt' ? '#047857' : ($invoice->document_type === 'quote' ? '#2563eb' : '#0f172a') }};
         }
         .doc-num {
             font-size: 12px;
@@ -203,12 +203,14 @@
                 </div>
             </td>
             <td style="vertical-align: top; width: 45%;">
-                <div class="doc-title">{{ $invoice->document_type === 'receipt' ? 'Official Receipt' : 'Invoice' }}</div>
+                <div class="doc-title">{{ $invoice->document_type === 'receipt' ? 'Official Receipt' : ($invoice->document_type === 'quote' ? 'Quotation / Estimate' : 'Invoice') }}</div>
                 <div class="doc-num">#{{ $invoice->document_number }}</div>
                 <div class="doc-meta">
                     <strong>Date Issued:</strong> {{ $invoice->issue_date ? \Carbon\Carbon::parse($invoice->issue_date)->format('d M Y') : date('d M Y') }}<br>
                     @if($invoice->document_type === 'receipt' && $invoice->payment_date)
                         <strong>Date Paid:</strong> {{ \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') }}<br>
+                    @elseif($invoice->document_type === 'quote')
+                        <strong>Valid Until:</strong> {{ $invoice->due_date ? \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') : \Carbon\Carbon::parse($invoice->issue_date)->addDays(30)->format('d M Y') }}<br>
                     @elseif($invoice->due_date)
                         <strong>Payment Due:</strong> {{ \Carbon\Carbon::parse($invoice->due_date)->format('d M Y') }}<br>
                     @endif
@@ -222,21 +224,32 @@
     </table>
 
     <!-- WORK STATUS BANNER -->
-    <div class="work-status-banner">
-        @if($invoice->work_status === 'work_done')
+    @if($invoice->document_type === 'quote')
+        <div class="work-status-banner" style="background-color: #eff6ff; border-color: #bfdbfe; color: #1e40af;">
+            <strong>PROPOSED WORK SPECIFICATION &amp; ESTIMATE</strong>
+            @if($invoice->work_scheduled_date)
+                &mdash; Preferred Service Date: {{ \Carbon\Carbon::parse($invoice->work_scheduled_date)->format('d M Y') }}
+            @else
+                &mdash; Dates to be scheduled upon quotation acceptance
+            @endif
+        </div>
+    @elseif($invoice->work_status === 'work_done')
+        <div class="work-status-banner">
             <strong>WORK COMPLETED &amp; CERTIFIED</strong>
             @if($invoice->work_completed_date)
                 &mdash; Completion Signed Off: {{ \Carbon\Carbon::parse($invoice->work_completed_date)->format('d M Y') }}
             @endif
-        @else
+        </div>
+    @else
+        <div class="work-status-banner">
             <strong>WORK TO BE COMPLETED</strong>
             @if($invoice->work_scheduled_date)
                 &mdash; Scheduled Execution: {{ \Carbon\Carbon::parse($invoice->work_scheduled_date)->format('d M Y') }}
             @else
-                &mdash; Scheduled date to be finalized upon deposit
+                &mdash; Scheduled date to be finalized upon booking confirmation
             @endif
-        @endif
-    </div>
+        </div>
+    @endif
 
     <!-- PARTIES & JOB DETAILS -->
     <table class="parties-table" cellpadding="0" cellspacing="0">
@@ -315,7 +328,15 @@
         <tr>
             <!-- Left: Payment Instructions or Paid Seal -->
             <td style="width: 55%; vertical-align: top; padding-right: 15px;">
-                @if($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0)
+                @if($invoice->document_type === 'quote')
+                    <div class="bank-box" style="border-left-color: #2563eb; background-color: #eff6ff;">
+                        <strong style="font-size: 10px; color: #1e40af; text-transform: uppercase;">Acceptance &amp; Booking Instructions</strong><br>
+                        To accept this quotation and confirm your booking date:<br>
+                        &bull; Call or WhatsApp: <strong>07368239696</strong><br>
+                        &bull; Email: <strong>info@expets.co.uk</strong> quoting Reference: <strong style="color: #1e40af;">#{{ $invoice->document_number }}</strong><br>
+                        <span style="font-size: 8px; color: #475569;">No upfront deposit required for standard bookings &bull; Fully insured &amp; vetted team &bull; 100% Satisfaction Guarantee</span>
+                    </div>
+                @elseif($invoice->status === 'paid' || $invoice->document_type === 'receipt' || $invoice->balance_due <= 0)
                     <div class="paid-stamp">
                         <div style="font-size: 13px; font-weight: 900; letter-spacing: 1px;">PAID IN FULL &bull; OFFICIAL RECEIPT</div>
                         <div style="font-size: 9px; margin-top: 3px;">

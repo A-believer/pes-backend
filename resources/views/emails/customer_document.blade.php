@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $invoice->document_type === 'receipt' ? 'Payment Receipt' : 'Invoice' }} - {{ $invoice->document_number }}</title>
+    <title>{{ $invoice->document_type === 'receipt' ? 'Payment Receipt' : ($invoice->document_type === 'quote' ? 'Quotation & Specification' : 'Invoice') }} - {{ $invoice->document_number }}</title>
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -198,7 +198,7 @@
             <!-- Main Content -->
             <div class="content">
                 <span class="badge">
-                    {{ $invoice->document_type === 'receipt' ? 'Official Payment Receipt' : 'Invoice Notification' }}
+                    {{ $invoice->document_type === 'receipt' ? 'Official Payment Receipt' : ($invoice->document_type === 'quote' ? 'Official Quotation & Proposal' : 'Invoice Notification') }}
                 </span>
 
                 <div class="greeting">
@@ -206,7 +206,9 @@
                 </div>
 
                 <div class="intro-text">
-                    @if($invoice->document_type === 'receipt' || $invoice->status === 'paid' || $invoice->balance_due <= 0)
+                    @if($invoice->document_type === 'quote')
+                        Thank you for your interest in Premium Expert Services. Please find attached our formal quotation and specification of works for your review. We are ready to assist you.
+                    @elseif($invoice->document_type === 'receipt' || $invoice->status === 'paid' || $invoice->balance_due <= 0)
                         Thank you for your payment. Please find attached the official receipt for your records regarding the services provided by Premium Expert Services.
                     @elseif($invoice->work_status === 'work_to_be_done')
                         Please find attached your invoice for the upcoming scheduled services. You can review the line items and payment instructions below.

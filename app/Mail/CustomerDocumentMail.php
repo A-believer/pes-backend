@@ -69,7 +69,7 @@ class CustomerDocumentMail extends Mailable {
     }
 
     public function envelope(): Envelope {
-        $typeLabel = $this->invoice->document_type === 'receipt' ? 'Payment Receipt' : 'Invoice';
+        $typeLabel = $this->invoice->document_type === 'receipt' ? 'Payment Receipt' : ($this->invoice->document_type === 'quote' ? 'Quotation & Specification' : 'Invoice');
         $defaultSubject = "{$typeLabel} {$this->invoice->document_number} - Premium Expert Services";
 
         return new Envelope(

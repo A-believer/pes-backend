@@ -79,7 +79,7 @@ class Invoice extends Model {
      * Generate sequential document number (e.g. INV-2026-0001, REC-2026-0001)
      */
     public static function generateNextDocumentNumber(string $type = 'invoice'): string {
-        $prefix = ($type === 'receipt') ? 'REC' : 'INV';
+        $prefix = ($type === 'receipt') ? 'REC' : (($type === 'quote') ? 'QUO' : 'INV');
         $year = date('Y');
         
         $latest = self::where('document_type', $type)

@@ -91,7 +91,7 @@ class InvoiceAdminController extends Controller {
      */
     public function store(Request $request): JsonResponse {
         $validated = $request->validate([
-            'document_type'        => 'required|in:invoice,receipt',
+            'document_type'        => 'required|in:invoice,receipt,quote',
             'document_number'      => 'nullable|string|max:50|unique:invoices,document_number',
             'quote_request_id'     => 'nullable|exists:quote_requests,id',
             'submission_id'        => 'nullable|exists:submissions,id',
@@ -238,7 +238,7 @@ class InvoiceAdminController extends Controller {
         }
 
         $validated = $request->validate([
-            'document_type'        => 'sometimes|in:invoice,receipt',
+            'document_type'        => 'sometimes|in:invoice,receipt,quote',
             'document_number'      => "sometimes|string|max:50|unique:invoices,document_number,{$id}",
             'customer_name'        => 'sometimes|string|max:150',
             'customer_email'       => 'sometimes|email|max:150',
@@ -468,7 +468,7 @@ class InvoiceAdminController extends Controller {
      */
     public function previewPdf(Request $request): Response {
         $validated = $request->validate([
-            'document_type'        => 'nullable|in:invoice,receipt',
+            'document_type'        => 'nullable|in:invoice,receipt,quote',
             'document_number'      => 'nullable|string',
             'quote_request_id'     => 'nullable|integer',
             'customer_name'        => 'nullable|string',
