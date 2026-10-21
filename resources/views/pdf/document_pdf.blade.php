@@ -199,7 +199,7 @@
                 <div class="company-meta">
                     Head Office &bull; UK Nationwide Support &bull; United Kingdom<br>
                     Company Reg: 14829104 &bull; United Kingdom<br>
-                    Tel: <strong>07368239696</strong> &bull; info@expets.co.uk &bull; https://expets.co.uk
+                    Tel: <strong>07368239696</strong> &bull; info@expets.co.uk &bull; https://www.expets.co.uk
                 </div>
             </td>
             <td style="vertical-align: top; width: 45%;">

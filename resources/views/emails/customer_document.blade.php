@@ -189,7 +189,7 @@
             <!-- Header -->
             <div class="header">
                 <div style="text-align: center; margin-bottom: 8px;">
-                    <img src="https://expets.co.uk/footer-logo.png" alt="Premium Expert Services Limited" />
+                    <img src="https://www.expets.co.uk/footer-logo.png" alt="Premium Expert Services Limited" />
                 </div>
                 <h1>Premium Expert Services Limited</h1>
                 <p>Commercial &amp; Domestic Property Specialists &bull; UK Nationwide</p>
@@ -347,7 +347,7 @@
                     PREMIUM EXPERT SERVICES LIMITED &bull; Company Reg #14829104
                 </p>
                 <p style="margin: 0; color: #64748b;">
-                    UK Nationwide Property Specialists &bull; Tel: 07368239696 &bull; info@expets.co.uk &bull; https://expets.co.uk
+                    UK Nationwide Property Specialists &bull; Tel: 07368239696 &bull; info@expets.co.uk &bull; https://www.expets.co.uk
                 </p>
             </div>
         </div>
