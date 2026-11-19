@@ -20,7 +20,7 @@ class QuoteRequestMail extends Mailable {
 
     public function envelope(): Envelope {
         return new Envelope(
-            subject: 'New Quote Request - Premium Expert Services',
+            subject: 'New Quote Request - Premium Experts Services',
         );
     }
 

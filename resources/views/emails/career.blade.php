@@ -67,7 +67,7 @@
         </div>
 
         <div style="background-color: #f1f5f9; padding: 16px; text-align: center; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0;">
-            Sent automatically from Premium Expert Services Management System
+            Sent automatically from Premium Experts Services Management System
         </div>
     </div>
 </body>

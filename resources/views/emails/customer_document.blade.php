@@ -189,9 +189,9 @@
             <!-- Header -->
             <div class="header">
                 <div style="text-align: center; margin-bottom: 8px;">
-                    <img src="https://www.expets.co.uk/footer-logo.png" alt="Premium Expert Services Limited" />
+                    <img src="https://www.expets.co.uk/footer-logo.png" alt="Premium Experts Services Limited" />
                 </div>
-                <h1>Premium Expert Services Limited</h1>
+                <h1>Premium Experts Services Limited</h1>
                 <p>Commercial &amp; Domestic Property Specialists &bull; UK Nationwide</p>
             </div>
 
@@ -207,9 +207,9 @@
 
                 <div class="intro-text">
                     @if($invoice->document_type === 'quote')
-                        Thank you for your interest in Premium Expert Services. Please find attached our formal quotation and specification of works for your review. We are ready to assist you.
+                        Thank you for your interest in Premium Experts Services. Please find attached our formal quotation and specification of works for your review. We are ready to assist you.
                     @elseif($invoice->document_type === 'receipt' || $invoice->status === 'paid' || $invoice->balance_due <= 0)
-                        Thank you for your payment. Please find attached the official receipt for your records regarding the services provided by Premium Expert Services.
+                        Thank you for your payment. Please find attached the official receipt for your records regarding the services provided by Premium Experts Services.
                     @elseif($invoice->work_status === 'work_to_be_done')
                         Please find attached your invoice for the upcoming scheduled services. You can review the line items and payment instructions below.
                     @else
@@ -344,7 +344,7 @@
             <!-- Footer -->
             <div class="footer">
                 <p style="margin: 0 0 6px 0; font-weight: 700; color: #475569;">
-                    PREMIUM EXPERT SERVICES LIMITED &bull; Company Reg #14829104
+                    PREMIUM EXPERTS SERVICES LIMITED
                 </p>
                 <p style="margin: 0; color: #64748b;">
                     UK Nationwide Property Specialists &bull; Tel: 07368239696 &bull; info@expets.co.uk &bull; https://www.expets.co.uk

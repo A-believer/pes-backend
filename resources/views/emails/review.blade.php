@@ -122,7 +122,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>Premium Expert Services</h1>
+            <h1>Premium Experts Services</h1>
             <p>Customer Review Notification Portal</p>
         </div>
         <div class="content">
@@ -164,7 +164,7 @@
             </div>
         </div>
         <div class="footer">
-            <p>Sent automatically by Premium Expert Services API &bull; {{ date('Y-m-d H:i:s') }}</p>
+            <p>Sent automatically by Premium Experts Services API &bull; {{ date('Y-m-d H:i:s') }}</p>
         </div>
     </div>
 </body>

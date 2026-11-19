@@ -193,12 +193,11 @@
                 @if($logoBase64)
                     <img src="{{ $logoBase64 }}" style="height: 38px; width: auto; max-width: 170px; margin-bottom: 4px;" alt="Logo" />
                 @else
-                    <div class="logo-box">Premium Expert Services Limited</div>
+                    <div class="logo-box">Premium Experts Services Limited</div>
                 @endif
                 <div class="tagline">Commercial &amp; Domestic Specialists &bull; UK Nationwide</div>
                 <div class="company-meta">
                     Head Office &bull; UK Nationwide Support &bull; United Kingdom<br>
-                    Company Reg: 14829104 &bull; United Kingdom<br>
                     Tel: <strong>07368239696</strong> &bull; info@expets.co.uk &bull; https://www.expets.co.uk
                 </div>
             </td>
@@ -340,7 +339,7 @@
                     <div class="paid-stamp">
                         <div style="font-size: 13px; font-weight: 900; letter-spacing: 1px;">PAID IN FULL &bull; OFFICIAL RECEIPT</div>
                         <div style="font-size: 9px; margin-top: 3px;">
-                            Payment verified on {{ $invoice->payment_date ? \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') : date('d M Y') }}. Thank you for choosing Premium Expert Services.
+                            Payment verified on {{ $invoice->payment_date ? \Carbon\Carbon::parse($invoice->payment_date)->format('d M Y') : date('d M Y') }}. Thank you for choosing Premium Experts Services.
                         </div>
                         @php
                             $bank = $invoice->bank_details_json ?: [
@@ -418,7 +417,7 @@
 
     <!-- FOOTER -->
     <div class="footer">
-        PREMIUM EXPERT SERVICES LIMITED &bull; Registered in England &amp; Wales &bull; Company No. 14829104 &bull; Support: info@expets.co.uk &bull; Tel: 07368239696 &bull; Page 1 of 1
+        PREMIUM EXPERTS SERVICES LIMITED &bull; Registered in England &amp; Wales &bull; Support: info@expets.co.uk &bull; Tel: 07368239696 &bull; Page 1 of 1
     </div>
 </body>
 </html>
